@@ -1,0 +1,17 @@
+# 标定外部相机
+# 使用指令查看 外部相机参数 video* * 表示要打开的ID，我对应的相机为video1
+v4l2-ctl -d  /dev/video1 --all 
+
+# 根据相机基本参数修改usb_cam-test.launch
+<param name="video_device" value="/dev/video1" /> 	# 相机的名称
+    <param name="image_width" value="1920" />		# 宽
+    <param name="image_height" value="1080" />		# 高
+    <param name="pixel_format" value="mjpeg" />		# 格式，参考官网 http://wiki.ros.org/usb_cam
+# cmd 运行程序 输入
+roslaunch usb_cam usb_cam-test.launch 
+# 成功打开相机
+# 打开另一个 cmd 标定
+rosrun camera_calibration cameracalibrator.py --size 8x6 --square 0.028  image:=/camera/image_raw camera:=/camera --no-service-check
+# size/square/image/camera：根据自己的修改
+
+
